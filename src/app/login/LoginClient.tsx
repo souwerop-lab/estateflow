@@ -9,17 +9,20 @@ import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
 import { hasSupabaseEnv } from "@/lib/supabase/config";
 
+const DEMO_EMAIL = "demo@estateflow.com";
+const DEMO_PASSWORD = "estateflow-demo";
+
 export default function LoginClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectedFrom = searchParams.get("redirectedFrom") || "/dashboard";
-  const [email, setEmail] = useState("demo@estateflow.com");
-  const [password, setPassword] = useState("estateflow-demo");
+  const [email, setEmail] = useState(DEMO_EMAIL);
+  const [password, setPassword] = useState(DEMO_PASSWORD);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function signIn(nextEmail: string, nextPassword: string, mode: "form" | "demo") {
     setError("");
 
     if (!hasSupabaseEnv()) {
@@ -27,14 +30,20 @@ export default function LoginClient() {
       return;
     }
 
-    setLoading(true);
+    if (mode === "demo") {
+      setDemoLoading(true);
+    } else {
+      setLoading(true);
+    }
+
     const supabase = createClient();
     const { error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+      email: nextEmail,
+      password: nextPassword,
     });
 
     setLoading(false);
+    setDemoLoading(false);
 
     if (authError) {
       setError(authError.message);
@@ -43,6 +52,17 @@ export default function LoginClient() {
 
     router.replace(redirectedFrom);
     router.refresh();
+  }
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await signIn(email, password, "form");
+  }
+
+  async function handleDemoSignIn() {
+    setEmail(DEMO_EMAIL);
+    setPassword(DEMO_PASSWORD);
+    await signIn(DEMO_EMAIL, DEMO_PASSWORD, "demo");
   }
 
   return (
@@ -62,6 +82,28 @@ export default function LoginClient() {
           <p className="mt-1 text-sm text-neutral-500">
             Sign in to save listings and open the agent dashboard.
           </p>
+        </div>
+
+        <div className="mb-5 rounded-2xl border border-emerald-100 bg-emerald-50 p-4">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm font-heading font-bold text-emerald-950">
+                Demo account
+              </p>
+              <p className="mt-1 text-xs font-medium text-emerald-800">
+                {DEMO_EMAIL} / {DEMO_PASSWORD}
+              </p>
+            </div>
+            <Button
+              type="button"
+              onClick={handleDemoSignIn}
+              disabled={loading || demoLoading}
+              className="h-9 rounded-xl bg-emerald-800 px-4 text-xs font-semibold text-white hover:bg-emerald-700"
+            >
+              {demoLoading && <Loader2 className="mr-2 size-3.5 animate-spin" />}
+              Sign in demo
+            </Button>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -84,7 +126,7 @@ export default function LoginClient() {
             </p>
           )}
 
-          <Button type="submit" disabled={loading} className="w-full h-11 rounded-xl bg-emerald-800 text-white hover:bg-emerald-700">
+          <Button type="submit" disabled={loading || demoLoading} className="w-full h-11 rounded-xl bg-emerald-800 text-white hover:bg-emerald-700">
             {loading && <Loader2 className="mr-2 size-4 animate-spin" />}
             Sign in
           </Button>
