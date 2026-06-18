@@ -11,14 +11,18 @@ import { FilterMobile } from "@/components/listings/FilterMobile";
 import { SortDropdown } from "@/components/listings/SortDropdown";
 import { PropertyGrid } from "@/components/listings/PropertyGrid";
 import { MapPlaceholder } from "@/components/listings/MapPlaceholder";
-import { properties } from "@/data/properties";
+import { properties as mockProperties } from "@/data/properties";
 import { useFilters } from "@/hooks/useFilters";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useIsMobile } from "@/hooks/useMediaQuery";
 import { Button } from "@/components/ui/button";
-import type { FilterState } from "@/types";
+import type { FilterState, Property } from "@/types";
 
-export default function ListingsClient() {
+interface ListingsClientProps {
+  properties?: Property[];
+}
+
+export default function ListingsClient({ properties = mockProperties }: ListingsClientProps) {
   const isMobile = useIsMobile();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const searchParams = useSearchParams();

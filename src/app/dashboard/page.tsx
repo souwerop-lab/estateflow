@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import DashboardClient from "./DashboardClient";
+import { getDashboardData } from "@/lib/data/estate";
 
 export const metadata: Metadata = {
   title: "Agent Dashboard | EstateFlow",
@@ -19,6 +20,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function DashboardPage() {
-  return <DashboardClient />;
+export default async function DashboardPage() {
+  const dashboardData = await getDashboardData();
+
+  return <DashboardClient data={dashboardData} />;
 }

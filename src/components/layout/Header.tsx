@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import {
   Building2,
   Heart,
+  LogOut,
   Menu,
   Search,
   User,
@@ -15,10 +16,13 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "@/lib/constants";
 import { MobileMenu } from "./MobileMenu";
+import { createClient } from "@/lib/supabase/client";
+import { hasSupabaseEnv } from "@/lib/supabase/config";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -27,6 +31,35 @@ export function Header() {
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!hasSupabaseEnv()) return;
+
+    let isMounted = true;
+    const supabase = createClient();
+
+    async function loadUser() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (isMounted) {
+        setUserEmail(user?.email ?? null);
+      }
+    }
+
+    loadUser();
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserEmail(session?.user.email ?? null);
+    });
+
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const isHome = pathname === "/";
@@ -128,13 +161,44 @@ export function Header() {
                 <Heart className="w-[18px] h-[18px]" />
               </Button>
 
-              <Button
-                className="bg-emerald-800 hover:bg-emerald-700 text-white rounded-full px-5 shadow-md hover:shadow-lg transition-all ml-1 cursor-pointer"
-                render={<Link href="/dashboard" />}
-              >
-                <User className="w-4 h-4 mr-2" />
-                Agent Portal
-              </Button>
+              {userEmail ? (
+                <>
+                  <Button
+                    className="bg-emerald-800 hover:bg-emerald-700 text-white rounded-full px-5 shadow-md hover:shadow-lg transition-all ml-1 cursor-pointer"
+                    render={<Link href="/dashboard" />}
+                  >
+                    <User className="w-4 h-4 mr-2" />
+                    Dashboard
+                  </Button>
+                  <form action="/auth/signout" method="post">
+                    <Button
+                      type="submit"
+                      variant="outline"
+                      className="rounded-full border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50"
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      Sign out
+                    </Button>
+                  </form>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="outline"
+                    className="rounded-full border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50"
+                    render={<Link href="/login" />}
+                  >
+                    Login
+                  </Button>
+                  <Button
+                    className="bg-emerald-800 hover:bg-emerald-700 text-white rounded-full px-5 shadow-md hover:shadow-lg transition-all ml-1 cursor-pointer"
+                    render={<Link href="/login?redirectedFrom=/dashboard" />}
+                  >
+                    <User className="w-4 h-4 mr-2" />
+                    Agent Portal
+                  </Button>
+                </>
+              )}
             </div>
 
             {/* Mobile Menu Button */}

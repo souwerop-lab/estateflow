@@ -7,6 +7,7 @@ import { PopularLocations } from "@/components/home/PopularLocations";
 import { TopAgents } from "@/components/home/TopAgents";
 import { MarketStats } from "@/components/home/MarketStats";
 import { CTASection } from "@/components/home/CTASection";
+import { getAgents, getFeaturedProperties, getMarketStats } from "@/lib/data/estate";
 
 export const metadata: Metadata = {
   title: "EstateFlow — Find Your Dream Home | Premium Real Estate Platform",
@@ -27,16 +28,22 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [featuredProperties, agents, marketStats] = await Promise.all([
+    getFeaturedProperties(6),
+    getAgents(),
+    getMarketStats(),
+  ]);
+
   return (
     <>
       <Header />
       <main className="min-h-screen bg-[#FAFAFA]">
         <HeroSection />
-        <FeaturedProperties />
+        <FeaturedProperties properties={featuredProperties} />
         <PopularLocations />
-        <TopAgents />
-        <MarketStats />
+        <TopAgents agents={agents.slice(0, 4)} />
+        <MarketStats stats={marketStats} />
         <CTASection />
       </main>
       <Footer />

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import ListingsClient from "./ListingsClient";
+import { getProperties } from "@/lib/data/estate";
 
 export const metadata: Metadata = {
   title: "Search Premium Properties | EstateFlow",
@@ -21,7 +22,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ListingsPage() {
+export default async function ListingsPage() {
+  const properties = await getProperties();
+
   return (
     <Suspense
       fallback={
@@ -30,7 +33,7 @@ export default function ListingsPage() {
         </div>
       }
     >
-      <ListingsClient />
+      <ListingsClient properties={properties} />
     </Suspense>
   );
 }

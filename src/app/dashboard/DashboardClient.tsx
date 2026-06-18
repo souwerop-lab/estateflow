@@ -28,6 +28,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { DASHBOARD_NAV } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import { useComingSoon } from "@/components/ui/ComingSoonToast";
+import type { Activity, DashboardStats, Lead, Property } from "@/types";
 
 const iconMap: Record<string, React.ReactNode> = {
   "layout-dashboard": <LayoutDashboard className="w-4 h-4" />,
@@ -39,7 +40,16 @@ const iconMap: Record<string, React.ReactNode> = {
   settings: <Settings className="w-4 h-4" />,
 };
 
-export default function DashboardClient() {
+interface DashboardClientProps {
+  data: {
+    stats: DashboardStats;
+    leads: Lead[];
+    activities: Activity[];
+    listings: Property[];
+  };
+}
+
+export default function DashboardClient({ data }: DashboardClientProps) {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("Overview");
@@ -54,14 +64,6 @@ export default function DashboardClient() {
 
   const handleNotificationsClick = () => {
     showToast("Agent Notifications");
-  };
-
-  const handleExitClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    showToast("Exit Dashboard");
-    setTimeout(() => {
-      window.location.href = "/";
-    }, 1000);
   };
 
   const renderTabContent = () => {
@@ -86,23 +88,23 @@ export default function DashboardClient() {
             </div>
 
             {/* Row 1: KPI Stats Cards */}
-            <StatsCards />
+            <StatsCards stats={data.stats} />
 
             {/* Row 2: CSS charts */}
-            <PerformanceCards />
+            <PerformanceCards stats={data.stats} />
 
             {/* Row 3: Listings table + Recent Activity Timeline */}
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 items-stretch">
               <div className="xl:col-span-2">
-                <ListingsTable />
+                <ListingsTable properties={data.listings} />
               </div>
               <div>
-                <RecentActivity />
+                <RecentActivity activities={data.activities} />
               </div>
             </div>
 
             {/* Row 4: Client Leads Inquiries */}
-            <LeadsSection />
+            <LeadsSection leads={data.leads} />
           </>
         );
 
@@ -114,7 +116,7 @@ export default function DashboardClient() {
               <p className="text-xs text-neutral-500 mt-0.5">Manage and edit your active property listings</p>
             </div>
             <div className="bg-white rounded-2xl border border-neutral-200 p-2 shadow-xs">
-              <ListingsTable />
+              <ListingsTable properties={data.listings} />
             </div>
           </div>
         );
@@ -127,7 +129,7 @@ export default function DashboardClient() {
               <p className="text-xs text-neutral-500 mt-0.5">Review client requests and schedules</p>
             </div>
             <div className="bg-white rounded-2xl border border-neutral-200 p-2 shadow-xs">
-              <LeadsSection />
+              <LeadsSection leads={data.leads} />
             </div>
           </div>
         );
@@ -139,8 +141,8 @@ export default function DashboardClient() {
               <h1 className="text-lg font-heading font-bold text-neutral-900">Performance Analytics</h1>
               <p className="text-xs text-neutral-500 mt-0.5">Review sales, views, and conversion stats</p>
             </div>
-            <StatsCards />
-            <PerformanceCards />
+            <StatsCards stats={data.stats} />
+            <PerformanceCards stats={data.stats} />
           </div>
         );
 
@@ -239,14 +241,15 @@ export default function DashboardClient() {
 
                 {/* Mobile Footer */}
                 <div className="p-4 border-t border-neutral-100">
-                  <Link
-                    href="/"
-                    onClick={handleExitClick}
-                    className="flex w-full items-center gap-2.5 px-3 py-2.5 text-xs font-semibold text-neutral-500 hover:text-neutral-950 rounded-lg hover:bg-neutral-50 transition-all cursor-pointer"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    Exit Dashboard
-                  </Link>
+                  <form action="/auth/signout" method="post">
+                    <button
+                      type="submit"
+                      className="flex w-full items-center gap-2.5 px-3 py-2.5 text-xs font-semibold text-neutral-500 hover:text-neutral-950 rounded-lg hover:bg-neutral-50 transition-all cursor-pointer"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </button>
+                  </form>
                 </div>
               </SheetContent>
             </Sheet>

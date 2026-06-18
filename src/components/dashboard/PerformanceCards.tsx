@@ -1,8 +1,15 @@
 "use client";
 
 import { BarChart3, LineChart } from "lucide-react";
+import { dashboardStats as mockDashboardStats } from "@/data/dashboard";
+import { formatNumber } from "@/lib/constants";
+import type { DashboardStats } from "@/types";
 
-export function PerformanceCards() {
+interface PerformanceCardsProps {
+  stats?: DashboardStats;
+}
+
+export function PerformanceCards({ stats = mockDashboardStats }: PerformanceCardsProps) {
   const months = [
     { name: "Oct", value: "$1.2M", pct: 40 },
     { name: "Nov", value: "$1.8M", pct: 60 },
@@ -13,11 +20,11 @@ export function PerformanceCards() {
   ];
 
   const funnelStages = [
-    { label: "Views", count: "14,520", pct: 100, color: "bg-emerald-800" },
-    { label: "Inquiries", count: "890", pct: 70, color: "bg-emerald-700" },
+    { label: "Views", count: formatNumber(stats.totalViews), pct: 100, color: "bg-emerald-800" },
+    { label: "Inquiries", count: formatNumber(stats.totalLeads * 10), pct: 70, color: "bg-emerald-700" },
     { label: "Showings", count: "234", pct: 45, color: "bg-emerald-600" },
     { label: "Offers", count: "45", pct: 25, color: "bg-amber-500" },
-    { label: "Closed", count: "6", pct: 10, color: "bg-amber-400" },
+    { label: "Closed", count: String(stats.closedDeals), pct: 10, color: "bg-amber-400" },
   ];
 
   return (

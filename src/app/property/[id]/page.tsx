@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { properties } from "@/data/properties";
+import { getProperties, getPropertyById } from "@/lib/data/estate";
 import PropertyDetailsClient from "./PropertyDetailsClient";
 
 interface Props {
@@ -10,7 +10,7 @@ interface Props {
 // Generate dynamic metadata for SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
-  const property = properties.find((p) => p.id === resolvedParams.id);
+  const property = await getPropertyById(resolvedParams.id);
 
   if (!property) {
     return {
@@ -46,11 +46,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PropertyDetailPage({ params }: Props) {
   const resolvedParams = await params;
-  const property = properties.find((p) => p.id === resolvedParams.id);
+  const [property, properties] = await Promise.all([
+    getPropertyById(resolvedParams.id),
+    getProperties(),
+  ]);
 
   if (!property) {
     notFound();
   }
 
-  return <PropertyDetailsClient property={property} />;
+  return <PropertyDetailsClient property={property} properties={properties} />;
 }

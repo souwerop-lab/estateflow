@@ -15,13 +15,13 @@ import { useFavorites } from "@/hooks/useFavorites";
 import { formatFullPrice } from "@/lib/constants";
 import { Badge } from "@/components/ui/badge";
 import type { Property } from "@/types";
-import { properties } from "@/data/properties";
 
 interface PropertyDetailsClientProps {
   property: Property;
+  properties: Property[];
 }
 
-export default function PropertyDetailsClient({ property }: PropertyDetailsClientProps) {
+export default function PropertyDetailsClient({ property, properties }: PropertyDetailsClientProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
 
   useEffect(() => {

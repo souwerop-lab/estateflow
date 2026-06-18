@@ -4,10 +4,11 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { agents } from "@/data/agents";
+import { agents as mockAgents } from "@/data/agents";
 import { AgentCard } from "@/components/ui/AgentCard";
+import type { Agent } from "@/types";
 
-const topAgents = agents.slice(0, 4);
+const mockTopAgents = mockAgents.slice(0, 4);
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -26,7 +27,11 @@ const itemVariants = {
   },
 };
 
-export function TopAgents() {
+interface TopAgentsProps {
+  agents?: Agent[];
+}
+
+export function TopAgents({ agents = mockTopAgents }: TopAgentsProps) {
   return (
     <section className="py-16 md:py-24 section-padding">
       <div className="section-width">
@@ -79,7 +84,7 @@ export function TopAgents() {
           viewport={{ once: true, margin: "-60px" }}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
         >
-          {topAgents.map((agent, index) => (
+          {agents.map((agent, index) => (
             <motion.div key={agent.id} variants={itemVariants}>
               <AgentCard agent={agent} index={index} />
             </motion.div>

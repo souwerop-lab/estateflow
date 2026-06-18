@@ -10,7 +10,8 @@ import {
   BarChart3,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { marketStats } from "@/data/stats";
+import { marketStats as mockMarketStats } from "@/data/stats";
+import type { MarketStat } from "@/types";
 
 const iconMap: Record<string, React.ElementType> = {
   home: Home,
@@ -38,7 +39,11 @@ const itemVariants = {
   },
 };
 
-export function MarketStats() {
+interface MarketStatsProps {
+  stats?: MarketStat[];
+}
+
+export function MarketStats({ stats = mockMarketStats }: MarketStatsProps) {
   return (
     <section className="relative overflow-hidden">
       {/* Background */}
@@ -87,7 +92,7 @@ export function MarketStats() {
             viewport={{ once: true, margin: "-60px" }}
             className="grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6"
           >
-            {marketStats.map((stat) => {
+            {stats.map((stat) => {
               const IconComp = iconMap[stat.icon] || Home;
 
               return (

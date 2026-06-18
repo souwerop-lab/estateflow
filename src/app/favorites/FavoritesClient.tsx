@@ -6,10 +6,15 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PropertyCard } from "@/components/ui/PropertyCard";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { properties } from "@/data/properties";
+import { properties as mockProperties } from "@/data/properties";
 import { useFavorites } from "@/hooks/useFavorites";
+import type { Property } from "@/types";
 
-export default function FavoritesClient() {
+interface FavoritesClientProps {
+  properties?: Property[];
+}
+
+export default function FavoritesClient({ properties = mockProperties }: FavoritesClientProps) {
   const { favorites, isFavorite, toggleFavorite, count, isLoaded } = useFavorites();
 
   // Filter properties based on local favorites array

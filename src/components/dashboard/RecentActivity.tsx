@@ -1,8 +1,8 @@
 "use client";
 
 import { Home, User, DollarSign, Eye, FileText, Star, Activity as ActivityIcon } from "lucide-react";
-import { activities } from "@/data/dashboard";
-import type { ActivityType } from "@/types";
+import { activities as mockActivities } from "@/data/dashboard";
+import type { Activity, ActivityType } from "@/types";
 
 import { EmptyState } from "@/components/ui/EmptyState";
 
@@ -42,7 +42,11 @@ const typeConfig: Record<
   },
 };
 
-export function RecentActivity() {
+interface RecentActivityProps {
+  activities?: Activity[];
+}
+
+export function RecentActivity({ activities = mockActivities }: RecentActivityProps) {
   if (activities.length === 0) {
     return (
       <div className="rounded-2xl border border-neutral-100 bg-white shadow-sm p-8 flex flex-col items-center justify-center min-h-[300px] h-full">

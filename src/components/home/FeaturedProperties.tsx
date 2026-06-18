@@ -4,11 +4,12 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { properties } from "@/data/properties";
+import { properties as mockProperties } from "@/data/properties";
 import { PropertyCard } from "@/components/ui/PropertyCard";
 import { useFavorites } from "@/hooks/useFavorites";
+import type { Property } from "@/types";
 
-const featuredProperties = properties.filter((p) => p.isFeatured).slice(0, 6);
+const mockFeaturedProperties = mockProperties.filter((p) => p.isFeatured).slice(0, 6);
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -27,7 +28,11 @@ const itemVariants = {
   },
 };
 
-export function FeaturedProperties() {
+interface FeaturedPropertiesProps {
+  properties?: Property[];
+}
+
+export function FeaturedProperties({ properties = mockFeaturedProperties }: FeaturedPropertiesProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
 
   return (
@@ -82,7 +87,7 @@ export function FeaturedProperties() {
           viewport={{ once: true, margin: "-60px" }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {featuredProperties.map((property, index) => (
+          {properties.map((property, index) => (
             <motion.div key={property.id} variants={itemVariants}>
               <PropertyCard
                 property={property}

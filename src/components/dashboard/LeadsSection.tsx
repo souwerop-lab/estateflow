@@ -1,9 +1,10 @@
 "use client";
 
 import { MessageSquare, Calendar, DollarSign, ArrowRight, UserX } from "lucide-react";
-import { leads } from "@/data/dashboard";
+import { leads as mockLeads } from "@/data/dashboard";
 import { Badge } from "@/components/ui/badge";
 import { EmptyState } from "@/components/ui/EmptyState";
+import type { Lead } from "@/types";
 
 const statusConfig: Record<
   string,
@@ -35,7 +36,11 @@ const statusConfig: Record<
   },
 };
 
-export function LeadsSection() {
+interface LeadsSectionProps {
+  leads?: Lead[];
+}
+
+export function LeadsSection({ leads = mockLeads }: LeadsSectionProps) {
   // Show first 4 leads for dashboard preview
   const recentLeads = leads.slice(0, 4);
 

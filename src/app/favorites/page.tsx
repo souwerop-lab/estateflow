@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import FavoritesClient from "./FavoritesClient";
+import { getProperties } from "@/lib/data/estate";
 
 export const metadata: Metadata = {
   title: "Your Saved Properties | EstateFlow",
   description:
-    "Review, manage, and compare your favorite properties saved on EstateFlow. Your collection of premium real estate is preserved locally.",
+    "Review, manage, and compare your favorite properties saved on EstateFlow.",
   openGraph: {
     title: "Saved Properties | EstateFlow",
     description: "Your personalized selection of premium real estate properties.",
@@ -19,6 +20,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function FavoritesPage() {
-  return <FavoritesClient />;
+export default async function FavoritesPage() {
+  const properties = await getProperties();
+
+  return <FavoritesClient properties={properties} />;
 }

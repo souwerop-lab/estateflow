@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { MoreHorizontal, Eye, ExternalLink, Edit, Trash2 } from "lucide-react";
-import { properties } from "@/data/properties";
+import { properties as mockProperties } from "@/data/properties";
 import { formatFullPrice } from "@/lib/constants";
 import {
   Table,
@@ -21,6 +21,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import type { Property } from "@/types";
 
 const statusConfig: Record<
   string,
@@ -44,7 +45,11 @@ const statusConfig: Record<
   },
 };
 
-export function ListingsTable() {
+interface ListingsTableProps {
+  properties?: Property[];
+}
+
+export function ListingsTable({ properties = mockProperties.slice(0, 6) }: ListingsTableProps) {
   // Show first 6 properties for dashboard preview
   const myProperties = properties.slice(0, 6);
 
