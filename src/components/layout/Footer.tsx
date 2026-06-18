@@ -23,11 +23,11 @@ const footerLinks = {
     { label: "Recently Sold", href: "/listings?status=sold" },
   ],
   agents: [
-    { label: "Sarah Mitchell", href: "/listings?search=Sarah" },
-    { label: "James Rodriguez", href: "/listings?search=James" },
-    { label: "Emily Chen", href: "/listings?search=Emily" },
-    { label: "Michael Thompson", href: "/listings?search=Michael" },
-    { label: "Our Team", href: "/#agents" },
+    { label: "All Agents", href: "/agents" },
+    { label: "Sarah Mitchell", href: "/agents/agent-1" },
+    { label: "James Rodriguez", href: "/agents/agent-2" },
+    { label: "Emily Chen", href: "/agents/agent-3" },
+    { label: "Michael Thompson", href: "/agents/agent-4" },
   ],
   support: [
     { label: "Help Center", href: "#" },

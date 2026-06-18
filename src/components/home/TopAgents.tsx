@@ -59,7 +59,7 @@ export function TopAgents({ agents = mockTopAgents }: TopAgentsProps) {
           </div>
 
           <Link
-            href="/listings"
+            href="/agents"
             className={cn(
               "inline-flex items-center gap-2 shrink-0",
               "h-11 px-6 rounded-xl",

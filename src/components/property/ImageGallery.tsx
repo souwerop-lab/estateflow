@@ -31,14 +31,14 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
   return (
     <div className="relative w-full">
       {/* Desktop Layout: Main (2/3) + 2x2 Grid (1/3) */}
-      <div className="hidden md:grid grid-cols-3 gap-3 h-[480px] w-full overflow-hidden rounded-2xl">
+      <div className="hidden md:grid grid-cols-3 gap-3 h-[360px] lg:h-[430px] xl:h-[500px] w-full overflow-hidden rounded-2xl">
         {/* Main Large Image */}
         <div 
           onClick={() => {
             setActiveIdx(0);
             setLightboxOpen(true);
           }}
-          className="col-span-2 relative h-full group overflow-hidden cursor-pointer bg-neutral-100"
+          className="col-span-2 relative h-full group overflow-hidden cursor-pointer bg-gradient-to-br from-neutral-100 via-white to-neutral-200"
         >
           {images[0] && (
             <Image
@@ -46,7 +46,7 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
               alt={title}
               fill
               sizes="(max-width: 1024px) 100vw, 66vw"
-              className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              className="object-contain transition-transform duration-700 ease-out group-hover:scale-[1.02]"
               priority
             />
           )}
@@ -73,7 +73,7 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
                   setActiveIdx(imgIdx);
                   setLightboxOpen(true);
                 }}
-                className="relative h-full overflow-hidden rounded-xl cursor-pointer group bg-neutral-100"
+                className="relative h-full overflow-hidden rounded-xl cursor-pointer group bg-gradient-to-br from-neutral-100 via-white to-neutral-200 ring-1 ring-neutral-200/70"
               >
                 {img && (
                   <Image
@@ -81,7 +81,7 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
                     alt={`${title} - Thumbnail ${imgIdx}`}
                     fill
                     sizes="(max-width: 1024px) 25vw, 15vw"
-                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    className="object-contain transition-transform duration-700 ease-out group-hover:scale-[1.03]"
                   />
                 )}
                 
@@ -102,7 +102,7 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
       </div>
 
       {/* Mobile Layout: Carousel with Dots */}
-      <div className="block md:hidden relative h-[280px] w-full overflow-hidden rounded-xl bg-neutral-100">
+      <div className="block md:hidden relative h-[220px] sm:h-[320px] w-full overflow-hidden rounded-xl bg-gradient-to-br from-neutral-100 via-white to-neutral-200 ring-1 ring-neutral-200/70">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeIdx}
@@ -119,7 +119,7 @@ export function ImageGallery({ images, title }: ImageGalleryProps) {
                 alt={`${title} - View ${activeIdx + 1}`}
                 fill
                 sizes="100vw"
-                className="object-cover"
+                className="object-contain"
               />
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />

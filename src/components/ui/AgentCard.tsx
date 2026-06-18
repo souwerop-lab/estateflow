@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Star, Phone, Mail, Home, TrendingUp, Award } from "lucide-react";
+import { ArrowRight, Star, Phone, Mail, Home, TrendingUp, Award } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Agent } from "@/types";
 
@@ -23,6 +23,8 @@ function getInitials(name: string): string {
 }
 
 export function AgentCard({ agent, className, index = 0 }: AgentCardProps) {
+  const profileHref = `/agents/${agent.id}`;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -43,7 +45,7 @@ export function AgentCard({ agent, className, index = 0 }: AgentCardProps) {
       <div className="relative flex flex-col items-center pt-6 pb-4 px-5">
         {/* Avatar */}
         <Link
-          href={`/listings?search=${encodeURIComponent(agent.name.split(" ")[0])}`}
+          href={profileHref}
           className="relative size-20 rounded-full overflow-hidden bg-neutral-100 ring-4 ring-emerald-50 shadow-md transition-transform duration-300 hover:scale-105 cursor-pointer block"
         >
           {agent.avatar ? (
@@ -63,7 +65,7 @@ export function AgentCard({ agent, className, index = 0 }: AgentCardProps) {
 
         {/* Name & title */}
         <Link
-          href={`/listings?search=${encodeURIComponent(agent.name.split(" ")[0])}`}
+          href={profileHref}
           className="mt-3 text-lg font-heading font-bold text-neutral-900 text-center hover:text-emerald-800 transition-colors cursor-pointer block"
         >
           {agent.name}
@@ -141,7 +143,7 @@ export function AgentCard({ agent, className, index = 0 }: AgentCardProps) {
       {/* Contact buttons */}
       <div className="mt-4 px-5 pb-5 grid grid-cols-2 gap-2">
         <a
-          href={`tel:${agent.phone}`}
+          href={`tel:${agent.phone.replace(/[^0-9+]/g, "")}`}
           className={cn(
             "inline-flex items-center justify-center gap-1.5",
             "h-9 rounded-lg text-sm font-medium",
@@ -166,6 +168,19 @@ export function AgentCard({ agent, className, index = 0 }: AgentCardProps) {
           <Mail className="size-3.5" />
           Email
         </a>
+        <Link
+          href={profileHref}
+          className={cn(
+            "col-span-2 inline-flex items-center justify-center gap-1.5",
+            "h-9 rounded-lg text-sm font-semibold",
+            "border border-emerald-100 bg-emerald-50 text-emerald-800",
+            "hover:bg-emerald-100 transition-colors duration-200",
+            "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2"
+          )}
+        >
+          View Profile
+          <ArrowRight className="size-3.5" />
+        </Link>
       </div>
     </motion.div>
   );

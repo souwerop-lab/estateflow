@@ -12,7 +12,7 @@ import type { Property } from "@/types";
 interface PropertyCardProps {
   property: Property;
   isFavorite: boolean;
-  onToggleFavorite: (id: string) => void;
+  onToggleFavorite?: (id: string) => void;
   className?: string;
   index?: number;
 }
@@ -50,7 +50,7 @@ function formatPrice(price: number): string {
 export function PropertyCard({
   property,
   isFavorite,
-  onToggleFavorite,
+  onToggleFavorite = () => {},
   className,
   index = 0,
 }: PropertyCardProps) {
@@ -178,7 +178,7 @@ export function PropertyCard({
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                router.push(`/listings?search=${encodeURIComponent(property.agent.name.split(" ")[0])}`);
+                router.push(`/agents/${property.agent.id}`);
               }}
               className="mt-3 pt-3 border-t border-neutral-100 flex items-center gap-2.5 cursor-pointer hover:text-emerald-800 group/agent transition-all"
             >

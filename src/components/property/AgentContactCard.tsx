@@ -14,6 +14,7 @@ interface AgentContactCardProps {
 }
 
 export function AgentContactCard({ agent }: AgentContactCardProps) {
+  const profileHref = `/agents/${agent.id}`;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -40,7 +41,7 @@ export function AgentContactCard({ agent }: AgentContactCardProps) {
       {/* Agent Header */}
       <div className="flex items-center gap-4 mb-5">
         <Link
-          href={`/listings?search=${encodeURIComponent(agent.name.split(" ")[0])}`}
+          href={profileHref}
           className="relative size-14 rounded-full overflow-hidden bg-neutral-100 shrink-0 cursor-pointer hover:ring-2 hover:ring-emerald-500 transition-all block"
         >
           <Image
@@ -53,7 +54,7 @@ export function AgentContactCard({ agent }: AgentContactCardProps) {
         </Link>
         <div className="min-w-0">
           <Link
-            href={`/listings?search=${encodeURIComponent(agent.name.split(" ")[0])}`}
+            href={profileHref}
             className="text-base font-heading font-bold text-neutral-900 truncate hover:text-emerald-800 transition-colors cursor-pointer block"
           >
             {agent.name}

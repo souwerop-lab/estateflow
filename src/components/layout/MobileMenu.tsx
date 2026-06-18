@@ -17,6 +17,7 @@ import {
   LayoutDashboard,
   ListFilter,
   User,
+  Users,
 } from "lucide-react";
 import { NAV_ITEMS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -24,6 +25,7 @@ import { cn } from "@/lib/utils";
 const navIcons: Record<string, React.ReactNode> = {
   "/": <Home className="w-5 h-5" />,
   "/listings": <ListFilter className="w-5 h-5" />,
+  "/agents": <Users className="w-5 h-5" />,
   "/favorites": <Heart className="w-5 h-5" />,
   "/dashboard": <LayoutDashboard className="w-5 h-5" />,
 };

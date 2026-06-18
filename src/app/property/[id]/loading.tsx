@@ -18,7 +18,7 @@ export default function PropertyDetailLoading() {
           </div>
 
           {/* Gallery Skeleton */}
-          <div className="hidden md:grid grid-cols-3 gap-3 h-[480px] w-full overflow-hidden rounded-2xl mb-8">
+          <div className="hidden md:grid grid-cols-3 gap-3 h-[360px] lg:h-[430px] xl:h-[500px] w-full overflow-hidden rounded-2xl mb-8">
             <div className="col-span-2 h-full bg-neutral-200 animate-pulse" />
             <div className="grid grid-cols-2 gap-3 h-full">
               <div className="h-full bg-neutral-200 animate-pulse rounded-xl" />
@@ -27,7 +27,7 @@ export default function PropertyDetailLoading() {
               <div className="h-full bg-neutral-200 animate-pulse rounded-xl" />
             </div>
           </div>
-          <div className="block md:hidden h-[280px] w-full bg-neutral-200 animate-pulse rounded-xl mb-8" />
+          <div className="block md:hidden h-[220px] sm:h-[320px] w-full bg-neutral-200 animate-pulse rounded-xl mb-8" />
 
           {/* Details Content Columns Skeleton */}
           <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-8 items-start">

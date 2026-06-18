@@ -192,6 +192,26 @@ export async function getAgents(): Promise<Agent[]> {
   return (data as AgentRow[]).map(mapAgent);
 }
 
+export async function getAgentById(id: string): Promise<Agent | null> {
+  const supabase = await getSupabaseOrNull();
+  if (!supabase) {
+    return mockAgents.find((agent) => agent.id === id) ?? null;
+  }
+
+  const { data, error } = await supabase
+    .from("agents")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Failed to load agent from Supabase", error);
+    return mockAgents.find((agent) => agent.id === id) ?? null;
+  }
+
+  return data ? mapAgent(data as AgentRow) : null;
+}
+
 export async function getProperties(): Promise<Property[]> {
   const supabase = await getSupabaseOrNull();
   if (!supabase) return mockProperties;
