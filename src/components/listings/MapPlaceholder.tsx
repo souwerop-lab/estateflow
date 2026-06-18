@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useRef } from "react";
 import Link from "next/link";
-import { 
-  MapPin, Plus, Minus, Layers, RotateCcw, 
-  Home, BedDouble, Bath, Square, ChevronRight 
+import {
+  MapPin, Plus, Minus, RotateCcw,
+  Home, BedDouble, Bath, Square, ChevronRight
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";

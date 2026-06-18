@@ -73,7 +73,7 @@ const itemVariants = {
 };
 
 const cardVariants = {
-  hidden: (i: number) => ({
+  hidden: () => ({
     opacity: 0,
     x: 40,
     rotate: 0,

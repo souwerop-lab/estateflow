@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import { FilterState, Property, SortOption } from "@/types";
+import type { FilterState, Property } from "@/types";
 
 const DEFAULT_FILTERS: FilterState = {
   search: "",
@@ -18,9 +18,9 @@ const DEFAULT_FILTERS: FilterState = {
 export function useFilters(properties: Property[]) {
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
 
-  const updateFilter = useCallback((
-    keyOrFilters: Partial<FilterState> | keyof FilterState,
-    value?: any
+  const updateFilter = useCallback(<K extends keyof FilterState>(
+    keyOrFilters: Partial<FilterState> | K,
+    value?: FilterState[K]
   ) => {
     setFilters(prev => {
       if (typeof keyOrFilters === "string") {

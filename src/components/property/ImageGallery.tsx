@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Grid, ChevronLeft, ChevronRight, ImageIcon } from "lucide-react";
+import { Grid, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ImageGalleryProps {

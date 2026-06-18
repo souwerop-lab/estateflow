@@ -180,7 +180,7 @@ export function FilterPanel({
           </div>
           <Slider
             value={[Math.min(filters.priceRange[1], priceMax)]}
-            onValueChange={(val: any) =>
+            onValueChange={(val) =>
               onFilterChange({
                 priceRange: [PRICE_MIN, Array.isArray(val) ? val[0] : val],
               })

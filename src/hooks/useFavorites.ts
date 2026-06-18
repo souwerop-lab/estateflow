@@ -1,40 +1,58 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useMemo, useSyncExternalStore } from "react";
 
 const STORAGE_KEY = "estateflow-favorites";
+const FAVORITES_CHANGE_EVENT = "estateflow-favorites-change";
+
+function readFavoritesSnapshot() {
+  if (typeof window === "undefined") {
+    return "[]";
+  }
+
+  return localStorage.getItem(STORAGE_KEY) ?? "[]";
+}
+
+function parseFavorites(snapshot: string) {
+  try {
+    const parsed = JSON.parse(snapshot);
+    return Array.isArray(parsed) ? parsed.filter((id): id is string => typeof id === "string") : [];
+  } catch (e) {
+    console.error("Failed to parse favorites", e);
+    return [];
+  }
+}
+
+function subscribeToFavorites(onStoreChange: () => void) {
+  window.addEventListener("storage", onStoreChange);
+  window.addEventListener(FAVORITES_CHANGE_EVENT, onStoreChange);
+
+  return () => {
+    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener(FAVORITES_CHANGE_EVENT, onStoreChange);
+  };
+}
+
+function writeFavorites(favorites: string[]) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
+  window.dispatchEvent(new Event(FAVORITES_CHANGE_EVENT));
+}
 
 export function useFavorites() {
-  const [favorites, setFavorites] = useState<string[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Load from localStorage on mount
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        setFavorites(JSON.parse(stored));
-      }
-    } catch (e) {
-      console.error("Failed to load favorites", e);
-    }
-    setIsLoaded(true);
-  }, []);
-
-  // Save to localStorage whenever favorites change
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
-    }
-  }, [favorites, isLoaded]);
+  const snapshot = useSyncExternalStore(
+    subscribeToFavorites,
+    readFavoritesSnapshot,
+    () => "[]"
+  );
+  const favorites = useMemo(() => parseFavorites(snapshot), [snapshot]);
 
   const toggleFavorite = useCallback((propertyId: string) => {
-    setFavorites(prev => {
-      if (prev.includes(propertyId)) {
-        return prev.filter(id => id !== propertyId);
-      }
-      return [...prev, propertyId];
-    });
+    const currentFavorites = parseFavorites(readFavoritesSnapshot());
+    const nextFavorites = currentFavorites.includes(propertyId)
+      ? currentFavorites.filter((id) => id !== propertyId)
+      : [...currentFavorites, propertyId];
+
+    writeFavorites(nextFavorites);
   }, []);
 
   const isFavorite = useCallback((propertyId: string) => {
@@ -42,12 +60,12 @@ export function useFavorites() {
   }, [favorites]);
 
   const clearFavorites = useCallback(() => {
-    setFavorites([]);
+    writeFavorites([]);
   }, []);
 
   return {
     favorites,
-    isLoaded,
+    isLoaded: true,
     toggleFavorite,
     isFavorite,
     clearFavorites,

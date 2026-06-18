@@ -16,6 +16,7 @@ import { useFilters } from "@/hooks/useFilters";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useIsMobile } from "@/hooks/useMediaQuery";
 import { Button } from "@/components/ui/button";
+import type { FilterState } from "@/types";
 
 export default function ListingsClient() {
   const isMobile = useIsMobile();
@@ -40,12 +41,12 @@ export default function ListingsClient() {
     const status = searchParams.get("status");
     const search = searchParams.get("search");
 
-    const queryFilters: any = {};
+    const queryFilters: Partial<FilterState> = {};
 
     if (loc) queryFilters.location = loc;
-    if (type) queryFilters.propertyType = type;
+    if (type) queryFilters.propertyType = type as FilterState["propertyType"];
     if (status) {
-      queryFilters.status = status;
+      queryFilters.status = status as FilterState["status"];
       // Adjust price range limit for rental listings automatically
       if (status === "for-rent") {
         queryFilters.priceRange = [0, 15000];

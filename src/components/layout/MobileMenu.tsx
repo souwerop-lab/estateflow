@@ -17,7 +17,6 @@ import {
   LayoutDashboard,
   ListFilter,
   User,
-  X,
 } from "lucide-react";
 import { NAV_ITEMS } from "@/lib/constants";
 import { cn } from "@/lib/utils";

@@ -25,12 +25,12 @@ export async function GET() {
           ok: res.ok,
           status: res.status,
         };
-      } catch (e: any) {
+      } catch (e: unknown) {
         return {
           id,
           url,
           ok: false,
-          error: e.message || "Timeout/Network Error",
+          error: e instanceof Error ? e.message : "Timeout/Network Error",
         };
       }
     })

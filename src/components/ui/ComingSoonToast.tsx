@@ -46,7 +46,7 @@ export function ComingSoonProvider({ children }: { children: React.ReactNode }) 
             <div className="flex-1 min-w-0">
               <h5 className="text-[10px] font-bold font-heading text-amber-400 uppercase tracking-widest">Under Construction</h5>
               <p className="text-xs text-neutral-300 font-semibold mt-0.5 leading-snug">
-                The <span className="text-white font-bold">"{feature}"</span> feature is coming soon to EstateFlow!
+                The <span className="text-white font-bold">&quot;{feature}&quot;</span> feature is coming soon to EstateFlow!
               </p>
             </div>
             <button

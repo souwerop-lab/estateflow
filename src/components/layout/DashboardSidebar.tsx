@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import {
   Building2,
   LayoutDashboard,
@@ -46,7 +45,6 @@ export function DashboardSidebar({
   activeTab = "Overview",
   onTabChange,
 }: DashboardSidebarProps) {
-  const pathname = usePathname();
   const { showToast } = useComingSoon();
 
   const handleNotificationsClick = () => {

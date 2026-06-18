@@ -1,6 +1,6 @@
 import { Header } from "@/components/layout/Header";
 import { PropertyCardSkeleton } from "@/components/ui/LoadingSkeleton";
-import { SlidersHorizontal, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 
 export default function ListingsLoading() {
   return (

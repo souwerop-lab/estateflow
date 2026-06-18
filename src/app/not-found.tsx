@@ -59,7 +59,7 @@ export default function NotFound() {
           transition={{ delay: 0.2, duration: 0.5 }}
           className="mt-4 text-sm sm:text-base text-neutral-500 max-w-md leading-relaxed"
         >
-          The property, agent portal, or listing page you are looking for doesn't exist or has been relocated to another area of EstateFlow.
+          The property, agent portal, or listing page you are looking for doesn&apos;t exist or has been relocated to another area of EstateFlow.
         </motion.p>
 
         {/* Quick Search Helper Links */}
